@@ -15,6 +15,7 @@ HERE = Path(__file__).resolve().parent
 CAT = HERE / 'samples' / 'catalogue.csv'
 PRICES = HERE / 'samples' / 'approved_prices.csv'
 PDF = HERE / 'samples' / 'synthetic_rfq.pdf'
+BAD_ROW_PDF = HERE / 'samples' / 'malformed_row_rfq.pdf'
 NS = {'m': 'http://schemas.openxmlformats.org/spreadsheetml/2006/main'}
 
 
@@ -95,6 +96,33 @@ class PipelineTests(unittest.TestCase):
         with self.assertRaisesRegex(DataError, 'Malformed item'):
             parse_rfq_text('RFQ ID: RFQ-DEMO-1\nCurrency: USD\n001 | BRK-20A | Test | 2 | EA\n'
                            '002 | CAB-2M | Test | 5 | EA | EXTRA')
+
+    def test_malformed_item_like_rows_rejected_but_page_notes_preserved(self):
+        header = ('RFQ ID: RFQ-DEMO-1\nCurrency: USD\n'
+                  'LINE | CODE | DESCRIPTION | QTY | UOM\n'
+                  'Page 1 of 2\nNote: dimensions | specifications are illustrative\n'
+                  '1 | 2\n001 | BRK-20A | Test item | 4 | EA\n')
+        rfq, currency, rows = parse_rfq_text(header + 'Page 2 of 2\n')
+        self.assertEqual((rfq, currency, len(rows)), ('RFQ-DEMO-1', 'USD', 1))
+        for bad in ('2 | LGT-12W | LED lamp | 3 | EA',
+                    '0002 | LGT-12W | LED lamp | 3 | EA',
+                    '12345678 | LGT-12W | LED lamp | 3 | EA',
+                    'ABC | LGT-12W | LED lamp | 3 | EA',
+                    '2 | | LED lamp | 3 | EA',
+                    '2 | LGT-12W | LED lamp | 3',
+                    '002 | LGT-12W | LED lamp | 3 | EA | EXTRA'):
+            with self.subTest(bad=bad), self.assertRaisesRegex(DataError, 'Malformed item'):
+                parse_rfq_text(header + bad)
+
+    def test_real_pdf_malformed_second_row_fails_closed_without_quote(self):
+        extracted = extract_pdf_text(BAD_ROW_PDF)
+        self.assertIn('001 | BRK-20A', extracted)
+        self.assertIn('2 | LGT-12W', extracted)
+        with tempfile.TemporaryDirectory() as temporary:
+            quote = Path(temporary) / 'must_not_generate.xlsx'
+            with self.assertRaisesRegex(DataError, 'Malformed item'):
+                run(BAD_ROW_PDF, CAT, PRICES, quote)
+            self.assertFalse(quote.exists())
 
     def test_duplicate_line_number_rejected(self):
         with self.assertRaisesRegex(DataError, 'line numbers'):

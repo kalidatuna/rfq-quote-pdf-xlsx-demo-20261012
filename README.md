@@ -54,7 +54,7 @@ LINE | CODE | DESCRIPTION | QTY | UOM
 001 | BRK-20A | Miniature circuit breaker 20A | 4 | EA
 ```
 
-Each numbered row is retained in exactly one quote decision. Malformed rows/duplicate row numbers/unsupported document layout fail rather than silently omitting products; an invalid document produces **no new XLSX**. Only one text-based layout, up to **5 pages/50 RFQ lines**, and **1,000 rows per catalogue/price CSV** are supported. Inputs are limited to 5 MB PDF and 2 MB per CSV. PDF text extraction uses a local subprocess without a shell and with timeouts. The reader does not extract arbitrary tables or interpret handwritten/scanned content.
+Each numbered row is retained in exactly one quote decision. Malformed rows/duplicate row numbers/unsupported document layout fail rather than silently omitting products; an invalid document produces **no new XLSX**. The parser checks item-like pipe-separated lines even when the row identifier is malformed (for example `2 |` instead of `002 |`); ordinary page headings and non-item notes are retained as non-item text. Only one text-based layout, up to **5 pages/50 RFQ lines**, and **1,000 rows per catalogue/price CSV** are supported. Inputs are limited to 5 MB PDF and 2 MB per CSV. PDF text extraction uses a local subprocess without a shell and with timeouts. The reader does not extract arbitrary tables or interpret handwritten/scanned content.
 
 Matching is **only by exact product code**, with all requested quantities as positive whole numbers. The only accepted units are `EA`, `M`, `BOX`, and `PK`. Unit/pack conversion, substitutions, fuzzy matching and description-based automatic assignments are **intentionally prohibited**. Only an active unique catalogue row, matching unit, and a unique `approved=yes` price in the **same currency** can be priced. Money arithmetic uses Decimal, prices are limited to two decimal places, and prices cannot be negative.
 
@@ -66,7 +66,7 @@ Each workbook line has a persistent source reference: **RFQ line number**, `CAT-
 
 The `n8n-integration/` directory now includes an **inactive, manual-only starter workflow export** wrapping this synthetic demo. It has a fixed local shell execution step and a Code node that reports draft/review counts; it does not send a quote, require remote APIs, or install/deploy n8n. Import requires a suitably configured and authorized self-hosted n8n instance with Execute Command enabled. It was **not live-import tested**.
 
-Its exported command and Code node were exercised locally in **4 additional deterministic offline integration tests**, alongside the existing **17 core tests**:
+Its exported command and Code node were exercised locally in **4 additional deterministic offline integration tests**, alongside the **19 core tests** (including malformed-row PDF rejection):
 
 ```sh
 python3 n8n-integration/test_offline_integration.py -v

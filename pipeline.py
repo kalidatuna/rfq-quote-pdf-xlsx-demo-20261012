@@ -93,6 +93,22 @@ def extract_pdf_text(pdf: Path) -> str:
     return result.stdout.replace("\r\n", "\n")
 
 
+def is_item_row_candidate(raw: str) -> bool:
+    """Catch malformed table rows without treating headings or notes as items."""
+    if ROW_START.match(raw):
+        return True
+    fields = [part.strip() for part in raw.split('|')]
+    if len(fields) < 3:
+        return False
+    numbered = re.fullmatch(r'\d+', fields[0]) is not None
+    if numbered and (len(fields) >= 4 or SKU.fullmatch(fields[1])):
+        return True
+    # A corrupt line number can still precede an otherwise complete item.
+    return (len(fields) >= 5 and SKU.fullmatch(fields[1]) is not None
+            and re.fullmatch(r'\d+', fields[3]) is not None
+            and re.fullmatch(r'[A-Z]{1,8}', fields[4]) is not None)
+
+
 def parse_rfq_text(text: str) -> tuple[str, str, list[Item]]:
     ids = RFQ_HEADER.findall(text)
     currencies = CURRENCY_HEADER.findall(text)
@@ -100,7 +116,7 @@ def parse_rfq_text(text: str) -> tuple[str, str, list[Item]]:
         raise DataError("Expected exactly one 'RFQ ID:' and one 'Currency:' header")
     items: list[Item] = []
     for raw in text.splitlines():
-        if ROW_START.match(raw):
+        if is_item_row_candidate(raw):
             match = ROW.fullmatch(raw)
             if not match:
                 raise DataError(f"Malformed item row (would risk silently dropping a line): {raw[:100]!r}")
