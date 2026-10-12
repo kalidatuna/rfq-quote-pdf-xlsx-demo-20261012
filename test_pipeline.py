@@ -136,6 +136,21 @@ class PipelineTests(unittest.TestCase):
         self.assertEqual(d.status, 'INVALID_PRICE')
         self.assertIsNone(d.extension)
 
+    def test_duplicate_approval_csv_headers_fail_closed_without_quote(self):
+        """A trailing 'approved=yes' must never override 'approved=no'."""
+        with tempfile.TemporaryDirectory() as folder:
+            prices = Path(folder) / 'synthetic-conflicting-approvals.csv'
+            with prices.open('w', encoding='utf-8', newline='') as handle:
+                writer = csv.writer(handle)
+                writer.writerow(['price_version', 'sku', 'currency',
+                                 'unit_price', 'approved', 'approved'])
+                writer.writerow(['PR-SYNTHETIC-V1', 'BRK-20A', 'USD',
+                                 '12.50', 'no', 'yes'])
+            output = Path(folder) / 'must_not_approve.xlsx'
+            with self.assertRaisesRegex(DataError, 'Duplicate CSV header names'):
+                run(PDF, CAT, prices, output)
+            self.assertFalse(output.exists())
+
     def test_workbook_contains_quote_review_summary_and_formulas(self):
         with tempfile.TemporaryDirectory() as tmp:
             dest = Path(tmp) / 'demo.xlsx'

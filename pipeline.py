@@ -138,6 +138,11 @@ def load_reference(path: Path, fields: tuple[str, ...], version_col: str) -> tup
         reader = csv.DictReader(handle)
         if not reader.fieldnames or any(k not in reader.fieldnames for k in fields):
             raise DataError(f"{path.name} must have columns: {', '.join(fields)}")
+        # DictReader silently keeps the LAST value of a duplicated header.
+        # Two conflicting 'approved' columns could otherwise price an
+        # explicitly unapproved row, so reject ambiguous reference schemas.
+        if len(set(reader.fieldnames)) != len(reader.fieldnames):
+            raise DataError(f"Duplicate CSV header names in {path.name}")
         by_code: dict[str, list[RefRow]] = defaultdict(list)
         seen_versions: set[str] = set()
         count = 0
