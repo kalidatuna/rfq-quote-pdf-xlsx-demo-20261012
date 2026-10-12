@@ -1,0 +1,46 @@
+{
+  "name": "Synthetic RFQ PDF to XLSX review draft (local starter)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "7dfebdcb-fabd-4d01-a215-f84fdf78e651",
+      "name": "Manual demo run",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [260, 300]
+    },
+    {
+      "parameters": {
+        "command": "set -eu\n: \"${RFQ_DEMO_HOME:?Set RFQ_DEMO_HOME to the mounted synthetic RFQ demo directory}\"\ncd \"$RFQ_DEMO_HOME\"\npython3 pipeline.py --rfq samples/synthetic_rfq.pdf --catalogue samples/catalogue.csv --prices samples/approved_prices.csv --out outputs/quote_n8n_demo.xlsx"
+      },
+      "id": "cb4e28ae-a3fa-476e-a58d-c5095640bca4",
+      "name": "Run local quote draft",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [500, 300]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const commandResult = $input.first().json;\nif (Number(commandResult.exitCode ?? 0) !== 0) {\n  throw new Error('RFQ parser exited unsuccessfully: ' + String(commandResult.stderr ?? ''));\n}\nconst raw = String(commandResult.stdout ?? '').trim();\nconst match = /^DEMO ONLY \\| rows=(\\d+) priced=(\\d+) review=(\\d+) priced_subtotal=(\\d+\\.\\d{2}) \\| (outputs\\/quote_n8n_demo\\.xlsx)$/.exec(raw);\nif (!match) {\n  throw new Error('RFQ parser output did not match the approved local demo contract');\n}\nconst rows = Number(match[1]);\nconst priced = Number(match[2]);\nconst review = Number(match[3]);\nif (rows < 1 || priced < 0 || review < 0 || priced + review !== rows) {\n  throw new Error('RFQ parser returned inconsistent line counts');\n}\nreturn [{json: {status: 'DRAFT / DO NOT SEND', rows, priced, review, approvedLinesSubtotalUSD: match[4], outputRelativePath: match[5], requiresHumanReview: review > 0}}];"
+      },
+      "id": "9e3bbf3b-fc0f-40ae-b4df-39986880652f",
+      "name": "Mark draft for human review",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [740, 300]
+    }
+  ],
+  "connections": {
+    "Manual demo run": {
+      "main": [[{"node": "Run local quote draft", "type": "main", "index": 0}]]
+    },
+    "Run local quote draft": {
+      "main": [[{"node": "Mark draft for human review", "type": "main", "index": 0}]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false
+}

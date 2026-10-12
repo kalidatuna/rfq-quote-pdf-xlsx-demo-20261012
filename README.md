@@ -62,6 +62,18 @@ Held cases in the synthetic fixture: unknown SKU, wrong unit, no approved price 
 
 Each workbook line has a persistent source reference: **RFQ line number**, `CAT-DEMO-V1:rowN`, and `PR-DEMO-V1:rowN` (physical CSV lines, starting at 2 after the header). The summary also records complete SHA-256 hashes of the input PDF and reference CSVs; after an input change the workbook is regenerated from the new snapshot. Input text is stored as Excel strings, not interpreted as a user-supplied formula. `Quote Draft` calculates line totals with formulas **only for approved rows**; `Review Queue` offers blank fields for manual reviewer decisions/notes, with **no auto-accept or repricing**.
 
+## Optional self-hosted n8n starter
+
+The `n8n-integration/` directory now includes an **inactive, manual-only starter workflow export** wrapping this synthetic demo. It has a fixed local shell execution step and a Code node that reports draft/review counts; it does not send a quote, require remote APIs, or install/deploy n8n. Import requires a suitably configured and authorized self-hosted n8n instance with Execute Command enabled. It was **not live-import tested**.
+
+Its exported command and Code node were exercised locally in **4 additional deterministic offline integration tests**, alongside the existing **17 core tests**:
+
+```sh
+python3 n8n-integration/test_offline_integration.py -v
+```
+
+See [n8n integration instructions](n8n-integration/README.md). No customer data, paid assignment, contract or additional buyer contact is implied.
+
 ## Handover / outside-world boundary
 
 This is a synthetic proof of local technical capabilities only. It does **not** prove compatibility with Rami's actual PDF, product catalogue or price file, or with a live n8n runtime; those formats/access have not been provided. A paid test requires separate original-buyer **written acceptance of exact scope, samples, price, timing and delivery channel**, and confirmation from the buyer **and** payment provider that a truthful **17-year-old Georgian performer** with a **different, independently owned adult Luara commercial G&S/Georgian bank beneficiary** is permitted. Only after an actual verified recipient-side completed payment could any campaign revenue be counted. **The prime agent must review the original buyer's current paid terms before anyone initiates first contact.**
