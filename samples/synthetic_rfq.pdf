@@ -1,0 +1,93 @@
+%PDF-1.3
+%“Œ‹ž ReportLab Generated PDF document (opensource)
+1 0 obj
+<<
+/F1 2 0 R /F2 3 0 R
+>>
+endobj
+2 0 obj
+<<
+/BaseFont /Helvetica /Encoding /WinAnsiEncoding /Name /F1 /Subtype /Type1 /Type /Font
+>>
+endobj
+3 0 obj
+<<
+/BaseFont /Courier /Encoding /WinAnsiEncoding /Name /F2 /Subtype /Type1 /Type /Font
+>>
+endobj
+4 0 obj
+<<
+/Contents 8 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 7 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
+>>
+endobj
+5 0 obj
+<<
+/PageMode /UseNone /Pages 7 0 R /Type /Catalog
+>>
+endobj
+6 0 obj
+<<
+/Author (Offline RFQ Demo / no buyer data) /CreationDate (D:20000101000000+00'00') /Creator (anonymous) /Keywords () /ModDate (D:20000101000000+00'00') /Producer (ReportLab PDF Library - \(opensource\)) 
+  /Subject (unspecified) /Title (Synthetic RFQ - DEMO ONLY) /Trapped /False
+>>
+endobj
+7 0 obj
+<<
+/Count 1 /Kids [ 4 0 R ] /Type /Pages
+>>
+endobj
+8 0 obj
+<<
+/Length 1343
+>>
+stream
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
+BT /F2 10 Tf 12 TL ET
+BT 1 0 0 1 45 776.8898 Tm (DEMONSTRATION INPUT ONLY - NOT A REAL CUSTOMER REQUEST) Tj T* ET
+BT 1 0 0 1 45 750.8898 Tm (RFQ ID: RFQ-DEMO-20261012-A) Tj T* ET
+BT 1 0 0 1 45 724.8898 Tm (Customer: Blue Lantern Electrical \(fictional\)) Tj T* ET
+BT 1 0 0 1 45 698.8898 Tm (Currency: USD) Tj T* ET
+BT 1 0 0 1 45 672.8898 Tm (LINE | CODE | DESCRIPTION | QTY | UOM) Tj T* ET
+BT 1 0 0 1 45 646.8898 Tm (001 | BRK-20A | Miniature circuit breaker 20A | 4 | EA) Tj T* ET
+BT 1 0 0 1 45 620.8898 Tm (002 | CAB-2M | Power cable 2 metres | 3 | EA) Tj T* ET
+BT 1 0 0 1 45 594.8898 Tm (003 | NOT-999 | Imaginary DIN rail adaptor | 1 | EA) Tj T* ET
+BT 1 0 0 1 45 568.8898 Tm (004 | LGT-12W | LED downlight 12W | 5 | M) Tj T* ET
+BT 1 0 0 1 45 542.8898 Tm (005 | SWT-ONE | Single gang wall switch | 6 | EA) Tj T* ET
+BT 1 0 0 1 45 516.8898 Tm (006 | CON-DUP | Connector fitting | 2 | EA) Tj T* ET
+BT 1 0 0 1 45 490.8898 Tm (007 | CAB-5M | Power cable 5 metres | 2 | EA) Tj T* ET
+BT 1 0 0 1 45 464.8898 Tm (008 | CLIP-01 | Cable clip pack | 7 | PK) Tj T* ET
+BT 1 0 0 1 45 438.8898 Tm (009 | EURO-01 | European fitting | 1 | EA) Tj T* ET
+BT 1 0 0 1 45 412.8898 Tm (010 | OLD-01 | Retired terminal | 2 | EA) Tj T* ET
+BT 1 0 0 1 45 386.8898 Tm (END OF DEMONSTRATION RFQ - ALL DATA IS SYNTHETIC) Tj T* ET
+ 
+endstream
+endobj
+xref
+0 9
+0000000000 65535 f 
+0000000061 00000 n 
+0000000102 00000 n 
+0000000209 00000 n 
+0000000314 00000 n 
+0000000517 00000 n 
+0000000585 00000 n 
+0000000886 00000 n 
+0000000945 00000 n 
+trailer
+<<
+/ID 
+[<06cc95773a0b82dde8702c03595e980f><06cc95773a0b82dde8702c03595e980f>]
+% ReportLab generated PDF document -- digest (opensource)
+
+/Info 6 0 R
+/Root 5 0 R
+/Size 9
+>>
+startxref
+2339
+%%EOF

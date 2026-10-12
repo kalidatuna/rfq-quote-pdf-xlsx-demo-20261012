@@ -1,0 +1,11 @@
+catalog_version,sku,description,uom,active
+CAT-DEMO-V1,BRK-20A,Miniature circuit breaker 20A,EA,yes
+CAT-DEMO-V1,CAB-2M,Power cable 2 metres,EA,yes
+CAT-DEMO-V1,LGT-12W,LED downlight 12W,EA,yes
+CAT-DEMO-V1,SWT-ONE,Single gang wall switch,EA,yes
+CAT-DEMO-V1,CON-DUP,Connector fitting silver,EA,yes
+CAT-DEMO-V1,CON-DUP,Connector fitting black,EA,yes
+CAT-DEMO-V1,CAB-5M,Power cable 5 metres,EA,yes
+CAT-DEMO-V1,CLIP-01,Cable clip pack,PK,yes
+CAT-DEMO-V1,EURO-01,European fitting,EA,yes
+CAT-DEMO-V1,OLD-01,Retired terminal,EA,no
